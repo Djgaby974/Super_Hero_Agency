@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SuperHero - {{ super_hero.name }}{% endblock %}
+
+{% block body %}
+    <h1>{{ super_hero.name }}</h1>
+
+    <!-- Affichage de l'image du super-héros -->
+    <div class="mb-4">
+        {% if super_hero.imageName %}
+            <img src="/uploads/{{ super_hero.imageName }}" alt="{{ super_hero.name }}" width="200" class="img-thumbnail">
+        {% else %}
+            <p><em>No image available for this hero.</em></p>
+        {% endif %}
+    </div>
+
+    <!-- Tableau des détails -->
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ super_hero.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ super_hero.name }}</td>
+            </tr>
+            <tr>
+                <th>Alter Ego</th>
+                <td>{{ super_hero.alterEgo }}</td>
+            </tr>
+            <tr>
+                <th>Available</th>
+                <td>{{ super_hero.isAvailable ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Energy Level</th>
+                <td>{{ super_hero.energyLevel }}%</td>
+            </tr>
+            <tr>
+                <th>Biography</th>
+                <td>{{ super_hero.biography }}</td>
+            </tr>
+            <tr>
+                <th>Created At</th>
+                <td>{{ super_hero.createdAt ? super_hero.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Actions -->
+    <div class="mt-4">
+        <a href="{{ path('app_super_hero_index') }}" class="btn btn-secondary">Back to list</a>
+        <a href="{{ path('app_super_hero_edit', {'id': super_hero.id}) }}" class="btn btn-primary">Edit</a>
+        {{ include('super_hero/_delete_form.html.twig') }}
+    </div>
+{% endblock %}
