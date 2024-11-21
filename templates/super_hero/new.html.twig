@@ -1,11 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New SuperHero{% endblock %}
+{% block title %}Create SuperHero{% endblock %}
 
 {% block body %}
-    <h1>Create new SuperHero</h1>
+<div class="max-w-3xl mx-auto bg-gray-100 p-6 rounded-lg shadow-md mt-8">
+    <h1 class="text-2xl font-bold mb-6">Create a New SuperHero</h1>
 
-    {{ include('super_hero/_form.html.twig') }}
+    {{ form_start(form, { 'attr': { 'class': 'space-y-4' } }) }}
 
-    <a href="{{ path('app_super_hero_index') }}">back to list</a>
+        <!-- Name -->
+        <div>
+            {{ form_label(form.name, 'Name', { 'label_attr': { 'class': 'block text-sm font-medium text-gray-700' } }) }}
+            {{ form_widget(form.name, { 'attr': { 'class': 'mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500' } }) }}
+            {{ form_errors(form.name) }}
+        </div>
+
+        <!-- Alter Ego -->
+        <div>
+            {{ form_label(form.alterEgo, 'Alter Ego', { 'label_attr': { 'class': 'block text-sm font-medium text-gray-700' } }) }}
+            {{ form_widget(form.alterEgo, { 'attr': { 'class': 'mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500' } }) }}
+            {{ form_errors(form.alterEgo) }}
+        </div>
+
+        <!-- Availability -->
+        <div>
+            {{ form_label(form.isAvailable, 'Available?', { 'label_attr': { 'class': 'block text-sm font-medium text-gray-700' } }) }}
+            {{ form_widget(form.isAvailable, { 'attr': { 'class': 'mt-1' } }) }}
+            {{ form_errors(form.isAvailable) }}
+        </div>
+
+        <!-- Energy Level -->
+        <div>
+            {{ form_label(form.energyLevel, 'Energy Level', { 'label_attr': { 'class': 'block text-sm font-medium text-gray-700' } }) }}
+            {{ form_widget(form.energyLevel, { 'attr': { 'class': 'mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500' } }) }}
+            {{ form_errors(form.energyLevel) }}
+        </div>
+
+        <!-- Biography -->
+        <div>
+            {{ form_label(form.biography, 'Biography', { 'label_attr': { 'class': 'block text-sm font-medium text-gray-700' } }) }}
+            {{ form_widget(form.biography, { 'attr': { 'class': 'mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500' } }) }}
+            {{ form_errors(form.biography) }}
+        </div>
+
+        <!-- Image Upload -->
+        <div>
+            {{ form_label(form.image, 'Upload Image', { 'label_attr': { 'class': 'block text-sm font-medium text-gray-700' } }) }}
+            {{ form_widget(form.image, { 'attr': { 'class': 'mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500' } }) }}
+            {{ form_errors(form.image) }}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            Create
+        </button>
+
+    {{ form_end(form) }}
+</div>
 {% endblock %}

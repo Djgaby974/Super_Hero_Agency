@@ -1,20 +1,17 @@
 const Encore = require('@symfony/webpack-encore');
 
 Encore
-    .enablePostCssLoader()
     .setOutputPath('public/build/')
     .setPublicPath('/build')
-    .addEntry('app', './assets/app.js') // Point d'entrée principal
-    .enableStimulusBridge('./assets/controllers.json')
-    .splitEntryChunks()
+    .addEntry('app', './assets/app.js')
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
-    .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction())
-    .configureBabel((config) => {
-        config.presets.push('@babel/preset-env');
-    })
-    .enablePostCssLoader();
+    .enablePostCssLoader() // Si nécessaire
+    .configureBabelPresetEnv((options) => {
+        options.useBuiltIns = 'usage'; // Active polyfills automatiques
+        options.corejs = 3; // Version de CoreJS
+    });
 
 module.exports = Encore.getWebpackConfig();
