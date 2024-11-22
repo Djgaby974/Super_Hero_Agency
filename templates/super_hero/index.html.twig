@@ -4,7 +4,13 @@
 
 {% block body %}
 <div class="max-w-4xl mx-auto py-8 px-6 bg-white rounded-lg shadow-lg">
-    <h1 class="text-2xl font-bold mb-6 text-yellow-600 text-center">Super Heroes</h1>
+    <!-- Titre et bouton de navigation -->
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-yellow-600">Super Heroes</h1>
+        <a href="{{ path('app_power_index') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-400 transition-all">
+            View Powers
+        </a>
+    </div>
 
     <!-- Formulaire de filtre -->
     <form method="get" action="{{ path('app_super_hero_index') }}" class="mb-6 p-4 bg-gray-100 rounded-lg">
@@ -56,8 +62,25 @@
                 <td class="border px-4 py-2">{{ super_hero.isAvailable ? 'Yes' : 'No' }}</td>
                 <td class="border px-4 py-2">{{ super_hero.energyLevel }}</td>
                 <td class="border px-4 py-2 flex justify-center space-x-2">
-                    <a href="{{ path('app_super_hero_show', {'id': super_hero.id}) }}" class="text-blue-600 hover:underline">View</a>
-                    <a href="{{ path('app_super_hero_edit', {'id': super_hero.id}) }}" class="text-green-600 hover:underline">Edit</a>
+                    <!-- Bouton View -->
+                    <a href="{{ path('app_super_hero_show', {'id': super_hero.id}) }}"
+                       class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-400 transition-all">
+                        View
+                    </a>
+                    <!-- Bouton Edit -->
+                    <a href="{{ path('app_super_hero_edit', {'id': super_hero.id}) }}"
+                       class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-400 transition-all">
+                        Edit
+                    </a>
+                    <!-- Bouton Delete -->
+                    <form method="post" action="{{ path('app_super_hero_delete', {'id': super_hero.id}) }}"
+                          onsubmit="return confirm('Are you sure you want to delete this super-hero?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ super_hero.id) }}">
+                        <button type="submit"
+                                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-400 transition-all">
+                            Delete
+                        </button>
+                    </form>
                 </td>
             </tr>
         {% else %}
