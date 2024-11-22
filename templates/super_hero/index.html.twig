@@ -1,52 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SuperHero index{% endblock %}
+{% block title %}Super Heroes{% endblock %}
 
 {% block body %}
-    <h1>SuperHero index</h1>
+<h1 style="color: #1a1a40;">🦸 Super Heroes</h1>
 
-    <!-- Formulaire de filtres -->
-    <form method="get" action="{{ path('app_super_hero_index') }}" class="mb-4">
-        <div>
-            <label for="isAvailable">Availability:</label>
-            <select name="isAvailable" id="isAvailable">
-                <option value="">All</option>
-                <option value="1" {{ app.request.query.get('isAvailable') == '1' ? 'selected' }}>Available</option>
-                <option value="0" {{ app.request.query.get('isAvailable') == '0' ? 'selected' }}>Unavailable</option>
-            </select>
-        </div>
-
-        <div>
-            <label for="energyLevel">Minimum Energy Level:</label>
-            <input
-                type="number"
-                name="energyLevel"
-                id="energyLevel"
-                value="{{ app.request.query.get('energyLevel') }}"
-                min="0"
-                max="100"
-            >
-        </div>
-
-        <button type="submit">Filter</button>
-    </form>
-
-    <!-- Tableau des super-héros -->
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>AlterEgo</th>
-                <th>IsAvailable</th>
-                <th>EnergyLevel</th>
-                <th>Biography</th>
-                <th>ImageName</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Alter Ego</th>
+            <th>Availability</th>
+            <th>Energy Level</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for super_hero in super_heroes %}
             <tr>
                 <td>{{ super_hero.id }}</td>
@@ -54,21 +24,18 @@
                 <td>{{ super_hero.alterEgo }}</td>
                 <td>{{ super_hero.isAvailable ? 'Yes' : 'No' }}</td>
                 <td>{{ super_hero.energyLevel }}</td>
-                <td>{{ super_hero.biography }}</td>
-                <td>{{ super_hero.imageName }}</td>
-                <td>{{ super_hero.createdAt ? super_hero.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_super_hero_show', {'id': super_hero.id}) }}">show</a>
-                    <a href="{{ path('app_super_hero_edit', {'id': super_hero.id}) }}">edit</a>
+                    <a href="{{ path('app_super_hero_show', {'id': super_hero.id}) }}" class="btn">View</a>
+                    <a href="{{ path('app_super_hero_edit', {'id': super_hero.id}) }}" class="btn btn-secondary">Edit</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="9">no records found</td>
+                <td colspan="6">No heroes found</td>
             </tr>
         {% endfor %}
-        </tbody>
-    </table>
+    </tbody>
+</table>
 
-    <a href="{{ path('app_super_hero_new') }}">Create new</a>
+<a href="{{ path('app_super_hero_new') }}" class="btn">Create New Super Hero</a>
 {% endblock %}

@@ -1,0 +1,137 @@
+/* Global Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Comic Sans MS', Arial, sans-serif;
+    background-color: #1a1a40; /* Superhero dark theme */
+    color: #feda6a; /* Gold accent color */
+}
+
+/* Header */
+header {
+    background-color: #ff5c58; /* Heroic red */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header a {
+    color: white;
+    text-decoration: none;
+}
+
+header a:hover {
+    color: #feda6a;
+}
+
+/* Main Container */
+main {
+    padding: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #ff5c58;
+    color: white;
+}
+
+table tr:nth-child(even) {
+    background-color: #f4f4f9;
+}
+
+table tr:hover {
+    background-color: #feda6a;
+}
+
+/* Buttons */
+button, .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #ff5c58;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+
+button:hover, .btn:hover {
+    background-color: #ff3c3c;
+}
+/* Style des champs d'entrée */
+form input, form select, form textarea {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+/* Focus stylé */
+form input:focus, form select:focus, form textarea:focus {
+    border-color: #ff5c58; /* Couleur de focus (rouge héroïque) */
+    outline: none;
+    box-shadow: 0 0 8px rgba(255, 92, 88, 0.5); /* Glow autour */
+}
+
+/* Placeholders stylés */
+form input::placeholder, form textarea::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Style des labels */
+form label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #ff5c58; /* Couleur rouge héroïque */
+    display: block;
+    text-transform: uppercase;
+}
+
+/* Style du bouton */
+form button[type="submit"], form .btn {
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #ff5c58;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+form button[type="submit"]:hover, form .btn:hover {
+    background-color: #ff3c3c;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}

@@ -58,7 +58,7 @@ class SuperHero
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -70,7 +70,7 @@ class SuperHero
         return $this->alterEgo;
     }
 
-    public function setAlterEgo(?string $alterEgo): static
+    public function setAlterEgo(?string $alterEgo): self
     {
         $this->alterEgo = $alterEgo;
 
@@ -82,7 +82,7 @@ class SuperHero
         return $this->isAvailable;
     }
 
-    public function setAvailable(bool $isAvailable): static
+    public function setIsAvailable(bool $isAvailable): self
     {
         $this->isAvailable = $isAvailable;
 
@@ -94,7 +94,7 @@ class SuperHero
         return $this->energyLevel;
     }
 
-    public function setEnergyLevel(int $energyLevel): static
+    public function setEnergyLevel(int $energyLevel): self
     {
         $this->energyLevel = $energyLevel;
 
@@ -106,7 +106,7 @@ class SuperHero
         return $this->biography;
     }
 
-    public function setBiography(string $biography): static
+    public function setBiography(string $biography): self
     {
         $this->biography = $biography;
 
@@ -118,7 +118,7 @@ class SuperHero
         return $this->imageName;
     }
 
-    public function setImageName(?string $imageName): static
+    public function setImageName(?string $imageName): self
     {
         $this->imageName = $imageName;
 
@@ -130,7 +130,7 @@ class SuperHero
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -145,7 +145,7 @@ class SuperHero
         return $this->teams;
     }
 
-    public function addTeam(Team $team): static
+    public function addTeam(Team $team): self
     {
         if (!$this->teams->contains($team)) {
             $this->teams->add($team);
@@ -155,10 +155,9 @@ class SuperHero
         return $this;
     }
 
-    public function removeTeam(Team $team): static
+    public function removeTeam(Team $team): self
     {
         if ($this->teams->removeElement($team)) {
-            // set the owning side to null (unless already changed)
             if ($team->getLeader() === $this) {
                 $team->setLeader(null);
             }
