@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Power{% endblock %}
+
+{% block body %}
+    <h1>Edit Power</h1>
+
+    {{ include('power/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_power_index') }}">back to list</a>
+
+    {{ include('power/_delete_form.html.twig') }}
+{% endblock %}

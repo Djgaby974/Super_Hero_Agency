@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PowerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +24,14 @@ class Power
 
     #[ORM\Column]
     private ?int $level = null;
+
+    #[ORM\ManyToMany(targetEntity: SuperHero::class, mappedBy: 'powers')]
+    private Collection $superHeroes;
+
+    public function __construct()
+    {
+        $this->superHeroes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -60,6 +70,33 @@ class Power
     public function setLevel(int $level): static
     {
         $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SuperHero>
+     */
+    public function getSuperHeroes(): Collection
+    {
+        return $this->superHeroes;
+    }
+
+    public function addSuperHero(SuperHero $superHero): static
+    {
+        if (!$this->superHeroes->contains($superHero)) {
+            $this->superHeroes->add($superHero);
+            $superHero->addPower($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSuperHero(SuperHero $superHero): static
+    {
+        if ($this->superHeroes->removeElement($superHero)) {
+            $superHero->removePower($this);
+        }
 
         return $this;
     }

@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\SuperHero;
+use App\Entity\Power;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -64,6 +66,14 @@ class SuperHeroType extends AbstractType
             ->add('createdAt', null, [
                 'label' => 'Created At',
                 'widget' => 'single_text',
+                'attr' => ['class' => 'form-control'],
+            ])
+            ->add('powers', EntityType::class, [
+                'class' => Power::class,
+                'choice_label' => 'name',
+                'label' => 'Powers',
+                'multiple' => true, // Permet de sélectionner plusieurs pouvoirs
+                'expanded' => true, // Affiche des cases à cocher
                 'attr' => ['class' => 'form-control'],
             ]);
     }

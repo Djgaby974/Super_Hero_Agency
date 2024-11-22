@@ -1,34 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SuperHero Details{% endblock %}
+{% block title %}{{ super_hero.name }}{% endblock %}
 
 {% block body %}
-<div class="max-w-3xl mx-auto py-8 px-6 bg-white rounded-lg shadow-lg">
-    <h1 class="text-3xl font-bold mb-6 text-yellow-600 text-center">
+<div class="max-w-4xl mx-auto py-8 px-6 bg-white rounded-lg shadow-lg">
+    <h1 class="text-2xl font-bold mb-6 text-yellow-600">
         {{ super_hero.name }}
     </h1>
 
-    <!-- Image du Super-Héros -->
-    {% if super_hero.imageName %}
-        <div class="flex justify-center mb-6">
-            <img src="{{ asset('uploads/' ~ super_hero.imageName) }}" alt="{{ super_hero.name }}" class="w-40 h-40 object-cover rounded-full border-4 border-yellow-600">
-        </div>
+    <p><strong>Alter Ego:</strong> {{ super_hero.alterEgo }}</p>
+    <p><strong>Available:</strong> {{ super_hero.isAvailable ? 'Yes' : 'No' }}</p>
+    <p><strong>Energy Level:</strong> {{ super_hero.energyLevel }}%</p>
+    <p><strong>Biography:</strong> {{ super_hero.biography }}</p>
+
+    <h2 class="text-xl font-bold mt-6">Powers</h2>
+    {% if powers is not empty %}
+        <ul class="list-disc ml-6">
+            {% for power in powers %}
+                <li>
+                    <strong>{{ power.name }}</strong> (Level: {{ power.level }}) - {{ power.description }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-gray-500">No powers assigned.</p>
     {% endif %}
 
-    <!-- Détails -->
-    <div class="space-y-4">
-        <p><strong>Alter Ego:</strong> {{ super_hero.alterEgo ?: 'N/A' }}</p>
-        <p><strong>Availability:</strong> {{ super_hero.isAvailable ? 'Yes' : 'No' }}</p>
-        <p><strong>Energy Level:</strong> {{ super_hero.energyLevel }}%</p>
-        <p><strong>Biography:</strong></p>
-        <p>{{ super_hero.biography }}</p>
-        <p><strong>Created At:</strong> {{ super_hero.createdAt ? super_hero.createdAt|date('Y-m-d') : 'Unknown' }}</p>
-    </div>
-
-    <!-- Boutons -->
-    <div class="flex justify-between mt-6">
-        <a href="{{ path('app_super_hero_index') }}" class="btn btn-secondary">Back to List</a>
-        <a href="{{ path('app_super_hero_edit', {'id': super_hero.id}) }}" class="btn">Edit</a>
+    <div class="mt-6 flex justify-between">
+        <a href="{{ path('app_super_hero_index') }}" class="inline-block bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 transition-all">
+            Back to List
+        </a>
+        <a href="{{ path('app_super_hero_edit', {'id': super_hero.id}) }}" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition-all">
+            Edit SuperHero
+        </a>
     </div>
 </div>
 {% endblock %}

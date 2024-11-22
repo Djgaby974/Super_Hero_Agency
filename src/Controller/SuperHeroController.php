@@ -74,12 +74,14 @@ class SuperHeroController extends AbstractController
     public function show(SuperHero $superHero): Response
     {
         $energyPercentage = ($superHero->getEnergyLevel() / 100) * 100;
-
+    
         return $this->render('super_hero/show.html.twig', [
             'super_hero' => $superHero,
             'energyPercentage' => $energyPercentage,
+            'powers' => $superHero->getPowers(), // Ajout des pouvoirs
         ]);
     }
+    
 
     #[Route('/{id}/edit', name: 'app_super_hero_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, SuperHero $superHero, EntityManagerInterface $entityManager): Response

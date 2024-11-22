@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Power index{% endblock %}
+
+{% block body %}
+    <h1>Power index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Level</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for power in powers %}
+            <tr>
+                <td>{{ power.id }}</td>
+                <td>{{ power.name }}</td>
+                <td>{{ power.description }}</td>
+                <td>{{ power.level }}</td>
+                <td>
+                    <a href="{{ path('app_power_show', {'id': power.id}) }}">show</a>
+                    <a href="{{ path('app_power_edit', {'id': power.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_power_new') }}">Create new</a>
+{% endblock %}
