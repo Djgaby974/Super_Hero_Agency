@@ -3,39 +3,76 @@
 {% block title %}Super Heroes{% endblock %}
 
 {% block body %}
-<h1 style="color: #1a1a40;">🦸 Super Heroes</h1>
+<div class="max-w-4xl mx-auto py-8 px-6 bg-white rounded-lg shadow-lg">
+    <h1 class="text-2xl font-bold mb-6 text-yellow-600 text-center">Super Heroes</h1>
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Alter Ego</th>
-            <th>Availability</th>
-            <th>Energy Level</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for super_hero in super_heroes %}
+    <!-- Formulaire de filtre -->
+    <form method="get" action="{{ path('app_super_hero_index') }}" class="mb-6 p-4 bg-gray-100 rounded-lg">
+        <div class="mb-4">
+            <label for="isAvailable" class="block font-bold text-gray-700">Filter by Availability</label>
+            <select name="isAvailable" id="isAvailable" class="w-full border rounded-lg p-2">
+                <option value="">All</option>
+                <option value="1" {{ app.request.query.get('isAvailable') == '1' ? 'selected' }}>Available</option>
+                <option value="0" {{ app.request.query.get('isAvailable') == '0' ? 'selected' }}>Unavailable</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="energyLevel" class="block font-bold text-gray-700">Minimum Energy Level</label>
+            <input
+                type="number"
+                name="energyLevel"
+                id="energyLevel"
+                value="{{ app.request.query.get('energyLevel') }}"
+                min="0"
+                max="100"
+                class="w-full border rounded-lg p-2"
+            >
+        </div>
+
+        <button type="submit" class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 transition-all">
+            Filter
+        </button>
+    </form>
+
+    <!-- Tableau des super-héros -->
+    <table class="table-auto w-full border-collapse border border-gray-300">
+        <thead class="bg-gray-100">
             <tr>
-                <td>{{ super_hero.id }}</td>
-                <td>{{ super_hero.name }}</td>
-                <td>{{ super_hero.alterEgo }}</td>
-                <td>{{ super_hero.isAvailable ? 'Yes' : 'No' }}</td>
-                <td>{{ super_hero.energyLevel }}</td>
-                <td>
-                    <a href="{{ path('app_super_hero_show', {'id': super_hero.id}) }}" class="btn">View</a>
-                    <a href="{{ path('app_super_hero_edit', {'id': super_hero.id}) }}" class="btn btn-secondary">Edit</a>
+                <th class="border px-4 py-2">ID</th>
+                <th class="border px-4 py-2">Name</th>
+                <th class="border px-4 py-2">Alter Ego</th>
+                <th class="border px-4 py-2">Availability</th>
+                <th class="border px-4 py-2">Energy Level</th>
+                <th class="border px-4 py-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for super_hero in super_heroes %}
+            <tr class="hover:bg-gray-100">
+                <td class="border px-4 py-2">{{ super_hero.id }}</td>
+                <td class="border px-4 py-2">{{ super_hero.name }}</td>
+                <td class="border px-4 py-2">{{ super_hero.alterEgo ?: 'N/A' }}</td>
+                <td class="border px-4 py-2">{{ super_hero.isAvailable ? 'Yes' : 'No' }}</td>
+                <td class="border px-4 py-2">{{ super_hero.energyLevel }}</td>
+                <td class="border px-4 py-2 flex justify-center space-x-2">
+                    <a href="{{ path('app_super_hero_show', {'id': super_hero.id}) }}" class="text-blue-600 hover:underline">View</a>
+                    <a href="{{ path('app_super_hero_edit', {'id': super_hero.id}) }}" class="text-green-600 hover:underline">Edit</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">No heroes found</td>
+                <td colspan="6" class="text-center py-4 text-gray-500">No superheroes found.</td>
             </tr>
         {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
-<a href="{{ path('app_super_hero_new') }}" class="btn">Create New Super Hero</a>
+    <!-- Lien pour créer un nouveau super-héros -->
+    <div class="mt-6 text-center">
+        <a href="{{ path('app_super_hero_new') }}" class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 transition-all">
+            Create New SuperHero
+        </a>
+    </div>
+</div>
 {% endblock %}

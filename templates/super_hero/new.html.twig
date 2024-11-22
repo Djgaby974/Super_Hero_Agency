@@ -11,56 +11,48 @@
     <form method="post" enctype="multipart/form-data">
         {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
 
-        <!-- Champ Name -->
         <div class="mb-4">
-            <label for="name" class="block font-bold text-gray-700">Name</label>
+            {{ form_label(form.name) }}
             {{ form_widget(form.name, {'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Enter superhero name'}}) }}
             {{ form_errors(form.name) }}
         </div>
 
-        <!-- Champ Alter Ego -->
         <div class="mb-4">
-            <label for="alterEgo" class="block font-bold text-gray-700">Alter Ego</label>
+            {{ form_label(form.alterEgo) }}
             {{ form_widget(form.alterEgo, {'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Enter alter ego (optional)'}}) }}
             {{ form_errors(form.alterEgo) }}
         </div>
 
-        <!-- Champ Availability -->
         <div class="mb-4">
-            <label for="isAvailable" class="block font-bold text-gray-700">Available?</label>
+            {{ form_label(form.isAvailable) }}
             {{ form_widget(form.isAvailable, {'attr': {'class': 'w-full'}}) }}
             {{ form_errors(form.isAvailable) }}
         </div>
 
-        <!-- Champ Energy Level -->
         <div class="mb-4">
-            <label for="energyLevel" class="block font-bold text-gray-700">Energy Level</label>
-            {{ form_widget(form.energyLevel, {'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Enter energy level', 'min': 0, 'max': 100}}) }}
+            {{ form_label(form.energyLevel) }}
+            {{ form_widget(form.energyLevel, {'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Enter energy level', 'min': 0, 'max': 100'}}) }}
             {{ form_errors(form.energyLevel) }}
         </div>
 
-        <!-- Champ Biography -->
         <div class="mb-4">
-            <label for="biography" class="block font-bold text-gray-700">Biography</label>
+            {{ form_label(form.biography) }}
             {{ form_widget(form.biography, {'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Write a short biography'}}) }}
             {{ form_errors(form.biography) }}
         </div>
 
-        <!-- Champ Upload Image -->
         <div class="mb-4">
-            <label for="image" class="block font-bold text-gray-700">Upload Image</label>
+            {{ form_label(form.image) }}
             {{ form_widget(form.image, {'attr': {'class': 'w-full border rounded-lg p-2'}}) }}
             {{ form_errors(form.image) }}
         </div>
 
-        <!-- Champ Created At -->
         <div class="mb-4">
-            <label for="createdAt" class="block font-bold text-gray-700">Created At</label>
+            {{ form_label(form.createdAt) }}
             {{ form_widget(form.createdAt, {'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Select creation date'}}) }}
             {{ form_errors(form.createdAt) }}
         </div>
 
-        <!-- Bouton Submit -->
         <button type="submit" class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 transition-all">
             Create
         </button>
