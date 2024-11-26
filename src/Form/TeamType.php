@@ -43,10 +43,11 @@ class TeamType extends AbstractType
                 },
             ])
             ->add('isActive', CheckboxType::class, [
-                'label' => 'Is Active?',
-                'required' => false,
+                'label' => 'Équipe active ?',
+                'required' => false, // Permet de ne pas forcer la case à être cochée
                 'attr' => ['class' => 'form-check-input'],
-            ]);
+            ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

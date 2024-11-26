@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mission index{% endblock %}
+
+{% block body %}
+    <h1>Mission index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>StartAt</th>
+                <th>EndAt</th>
+                <th>Location</th>
+                <th>DangerLevel</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mission in missions %}
+            <tr>
+                <td>{{ mission.id }}</td>
+                <td>{{ mission.title }}</td>
+                <td>{{ mission.description }}</td>
+                <td>{{ mission.status }}</td>
+                <td>{{ mission.startAt ? mission.startAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ mission.endAt ? mission.endAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ mission.location }}</td>
+                <td>{{ mission.dangerLevel }}</td>
+                <td>
+                    <a href="{{ path('app_mission_show', {'id': mission.id}) }}">show</a>
+                    <a href="{{ path('app_mission_edit', {'id': mission.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_mission_new') }}">Create new</a>
+{% endblock %}
