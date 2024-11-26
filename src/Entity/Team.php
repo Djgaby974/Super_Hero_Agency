@@ -18,8 +18,8 @@ class Team
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column]
-    private ?bool $isActive = null;
+    #[ORM\Column(options: ['default' => false])]
+    private ?bool $isActive = false; // Valeur par défaut
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -27,18 +27,12 @@ class Team
     #[ORM\ManyToOne(inversedBy: 'teams')]
     private ?SuperHero $leader = null;
 
-    /**
-     * @var Collection<int, SuperHero>
-     */
     #[ORM\ManyToMany(targetEntity: SuperHero::class, inversedBy: 'teams')]
     private Collection $members;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Mission $currentMission = null;
 
-    /**
-     * @var Collection<int, Mission>
-     */
     #[ORM\OneToMany(targetEntity: Mission::class, mappedBy: 'assignedTeam')]
     private Collection $missions;
 
@@ -46,6 +40,7 @@ class Team
     {
         $this->members = new ArrayCollection();
         $this->missions = new ArrayCollection();
+        $this->isActive = false; // Initialisation par défaut
     }
 
     public function getId(): ?int
@@ -101,9 +96,6 @@ class Team
         return $this;
     }
 
-    /**
-     * @return Collection<int, SuperHero>
-     */
     public function getMembers(): Collection
     {
         return $this->members;
@@ -137,9 +129,6 @@ class Team
         return $this;
     }
 
-    /**
-     * @return Collection<int, Mission>
-     */
     public function getMissions(): Collection
     {
         return $this->missions;
@@ -158,7 +147,6 @@ class Team
     public function removeMission(Mission $mission): static
     {
         if ($this->missions->removeElement($mission)) {
-            // set the owning side to null (unless already changed)
             if ($mission->getAssignedTeam() === $this) {
                 $mission->setAssignedTeam(null);
             }
