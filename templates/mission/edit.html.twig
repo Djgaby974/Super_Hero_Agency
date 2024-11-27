@@ -3,11 +3,65 @@
 {% block title %}Edit Mission{% endblock %}
 
 {% block body %}
-    <h1>Edit Mission</h1>
+<div class="max-w-4xl mx-auto py-8 px-6 bg-white rounded-lg shadow-lg">
+    <h1 class="text-2xl font-bold mb-6 text-yellow-600 text-center">Edit Mission</h1>
 
-    {{ include('mission/_form.html.twig', {'button_label': 'Update'}) }}
+    <!-- Affichage des erreurs de validation -->
+    {% for message in app.flashes('error') %}
+        <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('success') %}
+        <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
+            {{ message }}
+        </div>
+    {% endfor %}
 
-    <a href="{{ path('app_mission_index') }}">back to list</a>
+    <form method="post" class="space-y-4">
+        {{ form_start(form) }}
 
-    {{ include('mission/_delete_form.html.twig') }}
+        {{ form_row(form.title, {
+            'attr': {'class': 'w-full border rounded-lg p-2'}
+        }) }}
+
+        {{ form_row(form.description, {
+            'attr': {'class': 'w-full border rounded-lg p-2'}
+        }) }}
+
+        {{ form_row(form.status, {
+            'attr': {'class': 'w-full border rounded-lg p-2'}
+        }) }}
+
+        {{ form_row(form.startAt, {
+            'attr': {'class': 'w-full border rounded-lg p-2'}
+        }) }}
+
+        {{ form_row(form.endAt, {
+            'attr': {'class': 'w-full border rounded-lg p-2'}
+        }) }}
+
+        {{ form_row(form.location, {
+            'attr': {'class': 'w-full border rounded-lg p-2'}
+        }) }}
+
+        {{ form_row(form.dangerLevel, {
+            'attr': {'class': 'w-full border rounded-lg p-2'}
+        }) }}
+
+        {{ form_row(form.assignedTeam, {
+            'attr': {'class': 'w-full border rounded-lg p-2'}
+        }) }}
+
+        {{ form_row(form.requiredPowers, {
+            'attr': {'class': 'w-full border rounded-lg p-2'}
+        }) }}
+
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-500 transition-all">
+            Update Mission
+        </button>
+
+        {{ form_end(form) }}
+    </form>
+</div>
 {% endblock %}

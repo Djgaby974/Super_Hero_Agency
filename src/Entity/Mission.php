@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MissionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +39,14 @@ class Mission
 
     #[ORM\ManyToOne(inversedBy: 'missions')]
     private ?Team $assignedTeam = null;
+
+    #[ORM\ManyToMany(targetEntity: Power::class)]
+    private Collection $requiredPowers;
+
+    public function __construct()
+    {
+        $this->requiredPowers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -135,6 +145,30 @@ class Mission
     public function setAssignedTeam(?Team $assignedTeam): static
     {
         $this->assignedTeam = $assignedTeam;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Power>
+     */
+    public function getRequiredPowers(): Collection
+    {
+        return $this->requiredPowers;
+    }
+
+    public function addRequiredPower(Power $power): static
+    {
+        if (!$this->requiredPowers->contains($power)) {
+            $this->requiredPowers->add($power);
+        }
+
+        return $this;
+    }
+
+    public function removeRequiredPower(Power $power): static
+    {
+        $this->requiredPowers->removeElement($power);
 
         return $this;
     }

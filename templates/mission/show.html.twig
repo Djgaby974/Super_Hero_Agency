@@ -1,50 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mission{% endblock %}
+{% block title %}Mission Details{% endblock %}
 
 {% block body %}
-    <h1>Mission</h1>
+<div class="max-w-4xl mx-auto py-8 px-6 bg-white rounded-lg shadow-lg">
+    <h1 class="text-2xl font-bold mb-6 text-yellow-600 text-center">{{ mission.title }}</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ mission.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ mission.title }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ mission.description }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ mission.status }}</td>
-            </tr>
-            <tr>
-                <th>StartAt</th>
-                <td>{{ mission.startAt ? mission.startAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>EndAt</th>
-                <td>{{ mission.endAt ? mission.endAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Location</th>
-                <td>{{ mission.location }}</td>
-            </tr>
-            <tr>
-                <th>DangerLevel</th>
-                <td>{{ mission.dangerLevel }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="mb-4">
+        <p><strong>Description:</strong> {{ mission.description }}</p>
+        <p><strong>Status:</strong> {{ mission.status }}</p>
+        <p><strong>Start At:</strong> {{ mission.startAt|date('Y-m-d H:i') }}</p>
+        <p><strong>End At:</strong> {{ mission.endAt|date('Y-m-d H:i') }}</p>
+        <p><strong>Location:</strong> {{ mission.location }}</p>
+        <p><strong>Danger Level:</strong> {{ mission.dangerLevel }}</p>
+    </div>
 
-    <a href="{{ path('app_mission_index') }}">back to list</a>
+    <div class="mb-4">
+        <h2 class="text-xl font-bold">Assigned Team</h2>
+        {% if mission.assignedTeam %}
+            <p>Name: {{ mission.assignedTeam.name }}</p>
+        {% else %}
+            <p>No team assigned.</p>
+        {% endif %}
+    </div>
 
-    <a href="{{ path('app_mission_edit', {'id': mission.id}) }}">edit</a>
+    <div>
+        <h2 class="text-xl font-bold">Required Powers</h2>
+        {% if mission.requiredPowers|length > 0 %}
+            <ul>
+                {% for power in mission.requiredPowers %}
+                    <li>{{ power.name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No powers required.</p>
+        {% endif %}
+    </div>
 
-    {{ include('mission/_delete_form.html.twig') }}
+    <div class="mt-6 text-center">
+        <a href="{{ path('app_mission_edit', {'id': mission.id}) }}"
+           class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-500 transition-all">
+            Edit Mission
+        </a>
+    </div>
+</div>
 {% endblock %}
