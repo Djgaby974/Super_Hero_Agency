@@ -18,31 +18,52 @@ class StatisticController extends AbstractController
         SuperHeroRepository $superHeroRepository,
         TeamRepository $teamRepository
     ): Response {
+        // Missions en cours
         $missionsInProgress = $missionRepository->findBy(['status' => 'in_progress']);
+
+        // Héros disponibles et indisponibles
         $availableHeroes = $superHeroRepository->findBy(['isAvailable' => true]);
         $unavailableHeroes = $superHeroRepository->findBy(['isAvailable' => false]);
-        $teams = $teamRepository->findAll();
 
+        // Statistiques des équipes
+        $teams = $teamRepository->findAll();
         $teamStats = [];
         foreach ($teams as $team) {
             $missions = $team->getMissions();
             $totalMissions = count($missions);
             $successfulMissions = count(array_filter($missions->toArray(), function ($mission) {
-                return $mission->getStatus() === 'success';
+                return $mission->isSuccessful();
             }));
+            $successRate = $totalMissions > 0 ? round(($successfulMissions / $totalMissions) * 100, 2) : 0;
 
             $teamStats[] = [
                 'team' => $team->getName(),
-                'total' => $totalMissions,
-                'success' => $successfulMissions,
+                'totalMissions' => $totalMissions,
+                'successfulMissions' => $successfulMissions,
+                'successRate' => $successRate,
             ];
         }
+
+        // Statistiques pour Chart.js
+        $chartData = [
+            'labels' => array_map(fn($stat) => $stat['team'], $teamStats),
+            'datasets' => [
+                [
+                    'label' => 'Taux de réussite (%)',
+                    'data' => array_map(fn($stat) => $stat['successRate'], $teamStats),
+                    'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
+                    'borderColor' => 'rgba(75, 192, 192, 1)',
+                    'borderWidth' => 1,
+                ],
+            ],
+        ];
 
         return $this->render('statistic/index.html.twig', [
             'missionsInProgress' => $missionsInProgress,
             'availableHeroes' => $availableHeroes,
             'unavailableHeroes' => $unavailableHeroes,
             'teamStats' => $teamStats,
+            'chartData' => json_encode($chartData),
         ]);
     }
 }

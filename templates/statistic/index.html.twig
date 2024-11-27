@@ -1,44 +1,89 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Dashboard et Statistiques{% endblock %}
 
 {% block body %}
-<h1>Dashboard et Statistiques</h1>
+<h1 class="text-center mb-4">Dashboard et Statistiques</h1>
 
-<!-- Section : Missions en cours -->
-<div>
-    <h2>Missions en cours</h2>
-    <ul>
-        {% for mission in missionsInProgress %}
-            <li>{{ mission.title }} - {{ mission.status }}</li>
-        {% endfor %}
-    </ul>
-</div>
+<div class="container">
 
-<!-- Section : Héros disponibles -->
-<div>
-    <h2>Héros disponibles</h2>
-    <ul>
-        {% for hero in availableHeroes %}
-            <li>{{ hero.name }}</li>
-        {% endfor %}
-    </ul>
-</div>
+    <!-- Section : Missions en cours -->
+    <div class="mb-5">
+        <h2 class="text-primary">Missions en cours</h2>
+        {% if missionsInProgress|length > 0 %}
+            <ul>
+                {% for mission in missionsInProgress %}
+                    <li><strong>{{ mission.title }}</strong> - Statut : {{ mission.status }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucune mission en cours.</p>
+        {% endif %}
+    </div>
 
-<!-- Section : Héros indisponibles -->
-<div>
-    <h2>Héros indisponibles</h2>
-    <ul>
-        {% for hero in unavailableHeroes %}
-            <li>{{ hero.name }}</li>
-        {% endfor %}
-    </ul>
-</div>
+    <!-- Section : Héros disponibles -->
+    <div class="mb-5">
+        <h2 class="text-success">Héros disponibles</h2>
+        {% if availableHeroes|length > 0 %}
+            <ul>
+                {% for hero in availableHeroes %}
+                    <li>{{ hero.name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun héros disponible pour le moment.</p>
+        {% endif %}
+    </div>
 
-<!-- Section : Statistiques des équipes -->
-<div>
-    <h2>Statistiques des équipes</h2>
-    <canvas id="teamStatsChart"></canvas>
+    <!-- Section : Héros indisponibles -->
+    <div class="mb-5">
+        <h2 class="text-danger">Héros indisponibles</h2>
+        {% if unavailableHeroes|length > 0 %}
+            <ul>
+                {% for hero in unavailableHeroes %}
+                    <li>{{ hero.name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun héros indisponible pour le moment.</p>
+        {% endif %}
+    </div>
+
+    <!-- Section : Statistiques des équipes -->
+    <div class="mb-5">
+        <h2 class="text-info">Statistiques des équipes</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Équipe</th>
+                    <th>Total Missions</th>
+                    <th>Missions Réussies</th>
+                    <th>Taux de Réussite (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stat in teamStats %}
+                    <tr>
+                        <td>{{ stat.team }}</td>
+                        <td>{{ stat.totalMissions }}</td>
+                        <td>{{ stat.successfulMissions }}</td>
+                        <td>{{ stat.successRate }}%</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">Aucune statistique disponible.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Section : Graphique -->
+    <div class="mb-5">
+        <h2 class="text-warning">Graphique : Taux de Réussite des Missions</h2>
+        <canvas id="teamStatsChart"></canvas>
+    </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -48,15 +93,15 @@
         labels: {{ teamStats|map(stat => stat.team)|json_encode()|raw }},
         datasets: [
             {
-                label: 'Missions réussies',
-                data: {{ teamStats|map(stat => stat.success)|json_encode()|raw }},
+                label: 'Missions Réussies',
+                data: {{ teamStats|map(stat => stat.successfulMissions)|json_encode()|raw }},
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
             },
             {
                 label: 'Total Missions',
-                data: {{ teamStats|map(stat => stat.total)|json_encode()|raw }},
+                data: {{ teamStats|map(stat => stat.totalMissions)|json_encode()|raw }},
                 backgroundColor: 'rgba(255, 159, 64, 0.2)',
                 borderColor: 'rgba(255, 159, 64, 1)',
                 borderWidth: 1,
@@ -68,6 +113,16 @@
         type: 'bar',
         data: data,
         options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Taux de Réussite des Missions par Équipe',
+                },
+            },
             scales: {
                 y: {
                     beginAtZero: true,

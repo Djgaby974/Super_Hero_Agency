@@ -3,51 +3,70 @@
 {% block title %}Mission index{% endblock %}
 
 {% block body %}
-    <h1>Mission index</h1>
+<h1 class="text-center mb-4">Mission index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>StartAt</th>
-                <th>EndAt</th>
-                <th>Location</th>
-                <th>DangerLevel</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for mission in missions %}
-            <tr>
-                <td>{{ mission.id }}</td>
-                <td>{{ mission.title }}</td>
-                <td>{{ mission.description }}</td>
-                <td>{{ mission.status }}</td>
-                <td>{{ mission.startAt ? mission.startAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ mission.endAt ? mission.endAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ mission.location }}</td>
-                <td>{{ mission.dangerLevel }}</td>
-                <td>
-                    <a href="{{ path('app_mission_show', {'id': mission.id}) }}">show</a>
-                    <a href="{{ path('app_mission_edit', {'id': mission.id}) }}">edit</a>
-                    
-                    <!-- Bouton Supprimer -->
-                    <form method="post" action="{{ path('app_mission_delete', {'id': mission.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette mission ?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ mission.id) }}">
-                        <button class="btn btn-danger">delete</button>
-                    </form>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>StartAt</th>
+            <th>EndAt</th>
+            <th>Location</th>
+            <th>DangerLevel</th>
+            <th>Success</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for mission in missions %}
+        <tr>
+            <td>{{ mission.id }}</td>
+            <td>{{ mission.title }}</td>
+            <td>{{ mission.description }}</td>
+            <td>
+                {% if mission.status == 'in_progress' %}
+                    <span class="badge bg-warning text-dark">En cours</span>
+                {% elseif mission.status == 'pending' %}
+                    <span class="badge bg-info text-dark">À venir</span>
+                {% elseif mission.status == 'completed' %}
+                    <span class="badge bg-success">Terminée</span>
+                {% else %}
+                    <span class="badge bg-secondary">Inconnu</span>
+                {% endif %}
+            </td>
+            <td>{{ mission.startAt ? mission.startAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ mission.endAt ? mission.endAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ mission.location }}</td>
+            <td>{{ mission.dangerLevel }}</td>
+            <td>
+                {% if mission.isSuccessful is not null %}
+                    <span class="badge {{ mission.isSuccessful ? 'bg-success' : 'bg-danger' }}">
+                        {{ mission.isSuccessful ? 'Oui' : 'Non' }}
+                    </span>
+                {% else %}
+                    <span class="badge bg-secondary">N/A</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ path('app_mission_show', {'id': mission.id}) }}" class="btn btn-sm btn-primary">Afficher</a>
+                <a href="{{ path('app_mission_edit', {'id': mission.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                
+                <form method="post" action="{{ path('app_mission_delete', {'id': mission.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette mission ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ mission.id) }}">
+                    <button class="btn btn-sm btn-danger">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="10" class="text-center">Aucun enregistrement trouvé</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 
-    <a href="{{ path('app_mission_new') }}">Create new</a>
+<a href="{{ path('app_mission_new') }}" class="btn btn-success">Créer une nouvelle mission</a>
 {% endblock %}

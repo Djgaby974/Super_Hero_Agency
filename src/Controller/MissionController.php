@@ -16,7 +16,8 @@ final class MissionController extends AbstractController
     #[Route(name: 'app_mission_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        $missions = $entityManager->getRepository(Mission::class)->findAll();
+        // Récupérer toutes les missions triées par ID
+        $missions = $entityManager->getRepository(Mission::class)->findBy([], ['id' => 'ASC']);
 
         return $this->render('mission/index.html.twig', [
             'missions' => $missions,
@@ -31,13 +32,25 @@ final class MissionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Validation des dates
+            // Vérification des dates
             if ($mission->getEndAt() <= $mission->getStartAt()) {
                 $this->addFlash('error', 'La date de fin doit être postérieure à la date de début.');
                 return $this->render('mission/new.html.twig', [
                     'mission' => $mission,
                     'form' => $form->createView(),
                 ]);
+            }
+
+            // Validation du statut "en cours"
+            if ($mission->getStatus() === 'in_progress') {
+                $now = new \DateTime();
+                if (!($mission->getStartAt() <= $now && $mission->getEndAt() >= $now)) {
+                    $this->addFlash('error', 'Les dates ne correspondent pas au statut "en cours".');
+                    return $this->render('mission/new.html.twig', [
+                        'mission' => $mission,
+                        'form' => $form->createView(),
+                    ]);
+                }
             }
 
             // Validation de la disponibilité de l'équipe
@@ -55,7 +68,7 @@ final class MissionController extends AbstractController
                     ->getResult();
 
                 if (!empty($conflictingMissions)) {
-                    $this->addFlash('error', 'L\'équipe est déjà assignée à une mission pendant cette période.');
+                    $this->addFlash('error', 'L\'équipe est déjà assignée à une autre mission durant cette période.');
                     return $this->render('mission/new.html.twig', [
                         'mission' => $mission,
                         'form' => $form->createView(),
@@ -80,19 +93,19 @@ final class MissionController extends AbstractController
             }
 
             if (!empty($missingPowers)) {
-                $this->addFlash('error', 'L\'équipe n\'a pas les pouvoirs requis suivants : ' . implode(', ', $missingPowers));
+                $this->addFlash('error', 'L\'équipe n\'a pas les pouvoirs requis : ' . implode(', ', $missingPowers));
                 return $this->render('mission/new.html.twig', [
                     'mission' => $mission,
                     'form' => $form->createView(),
                 ]);
             }
 
-            // Si toutes les validations passent
+            // Si tout est valide, sauvegarder la mission
             $entityManager->persist($mission);
             $entityManager->flush();
 
-            $this->addFlash('success', 'La mission a été créée avec succès.');
-            return $this->redirectToRoute('app_mission_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Mission créée avec succès.');
+            return $this->redirectToRoute('app_mission_index');
         }
 
         return $this->render('mission/new.html.twig', [
@@ -125,6 +138,18 @@ final class MissionController extends AbstractController
                 ]);
             }
 
+            // Validation du statut "en cours"
+            if ($mission->getStatus() === 'in_progress') {
+                $now = new \DateTime();
+                if (!($mission->getStartAt() <= $now && $mission->getEndAt() >= $now)) {
+                    $this->addFlash('error', 'Les dates ne correspondent pas au statut "en cours".');
+                    return $this->render('mission/edit.html.twig', [
+                        'mission' => $mission,
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }
+
             // Validation de la disponibilité de l'équipe
             $assignedTeam = $mission->getAssignedTeam();
             if ($assignedTeam) {
@@ -142,7 +167,7 @@ final class MissionController extends AbstractController
                     ->getResult();
 
                 if (!empty($conflictingMissions)) {
-                    $this->addFlash('error', 'L\'équipe est déjà assignée à une mission pendant cette période.');
+                    $this->addFlash('error', 'L\'équipe est déjà assignée à une autre mission durant cette période.');
                     return $this->render('mission/edit.html.twig', [
                         'mission' => $mission,
                         'form' => $form->createView(),
@@ -167,18 +192,18 @@ final class MissionController extends AbstractController
             }
 
             if (!empty($missingPowers)) {
-                $this->addFlash('error', 'L\'équipe n\'a pas les pouvoirs requis suivants : ' . implode(', ', $missingPowers));
+                $this->addFlash('error', 'L\'équipe n\'a pas les pouvoirs requis : ' . implode(', ', $missingPowers));
                 return $this->render('mission/edit.html.twig', [
                     'mission' => $mission,
                     'form' => $form->createView(),
                 ]);
             }
 
-            // Si toutes les validations passent
+            // Sauvegarder les modifications
             $entityManager->flush();
 
-            $this->addFlash('success', 'La mission a été mise à jour avec succès.');
-            return $this->redirectToRoute('app_mission_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Mission mise à jour avec succès.');
+            return $this->redirectToRoute('app_mission_index');
         }
 
         return $this->render('mission/edit.html.twig', [
@@ -193,8 +218,9 @@ final class MissionController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $mission->getId(), $request->request->get('_token'))) {
             $entityManager->remove($mission);
             $entityManager->flush();
+            $this->addFlash('success', 'Mission supprimée avec succès.');
         }
 
-        return $this->redirectToRoute('app_mission_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_mission_index');
     }
 }

@@ -7,6 +7,8 @@ use App\Entity\Team;
 use App\Entity\Power;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,8 +25,9 @@ class MissionType extends AbstractType
                 'label' => 'Description',
                 'attr' => ['class' => 'form-control'],
             ])
-            ->add('status', null, [
+            ->add('status', ChoiceType::class, [
                 'label' => 'Statut',
+                'choices' => array_combine(Mission::getValidStatuses(), Mission::getValidStatuses()),
                 'attr' => ['class' => 'form-control'],
             ])
             ->add('startAt', null, [
@@ -58,6 +61,11 @@ class MissionType extends AbstractType
                 'expanded' => true,
                 'label' => 'Pouvoirs Requis',
                 'attr' => ['class' => 'form-control'],
+            ])
+            ->add('isSuccessful', CheckboxType::class, [
+                'label' => 'Mission Réussie',
+                'required' => false,
+                'attr' => ['class' => 'form-check-input'],
             ]);
     }
 
