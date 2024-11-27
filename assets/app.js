@@ -1,5 +1,6 @@
 import './bootstrap.js';
 import './styles/app.css'; // Importation du fichier CSS principal
+import Chart from 'chart.js/auto';
 
 
 
