@@ -16,7 +16,7 @@
                 <th>EndAt</th>
                 <th>Location</th>
                 <th>DangerLevel</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -33,6 +33,12 @@
                 <td>
                     <a href="{{ path('app_mission_show', {'id': mission.id}) }}">show</a>
                     <a href="{{ path('app_mission_edit', {'id': mission.id}) }}">edit</a>
+                    
+                    <!-- Bouton Supprimer -->
+                    <form method="post" action="{{ path('app_mission_delete', {'id': mission.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette mission ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ mission.id) }}">
+                        <button class="btn btn-danger">delete</button>
+                    </form>
                 </td>
             </tr>
         {% else %}
