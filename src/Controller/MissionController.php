@@ -42,65 +42,25 @@ final class MissionController extends AbstractController
             }
 
             // Validation du statut "en cours"
-            if ($mission->getStatus() === 'in_progress') {
-                $now = new \DateTime();
-                if (!($mission->getStartAt() <= $now && $mission->getEndAt() >= $now)) {
-                    $this->addFlash('error', 'Les dates ne correspondent pas au statut "en cours".');
-                    return $this->render('mission/new.html.twig', [
-                        'mission' => $mission,
-                        'form' => $form->createView(),
-                    ]);
-                }
-            }
+            $this->validateInProgressDates($mission);
 
             // Validation de la disponibilité de l'équipe
-            $assignedTeam = $mission->getAssignedTeam();
-            if ($assignedTeam) {
-                $conflictingMissions = $entityManager->createQueryBuilder()
-                    ->select('m')
-                    ->from(Mission::class, 'm')
-                    ->where('m.assignedTeam = :team')
-                    ->andWhere(':startAt BETWEEN m.startAt AND m.endAt OR :endAt BETWEEN m.startAt AND m.endAt')
-                    ->setParameter('team', $assignedTeam)
-                    ->setParameter('startAt', $mission->getStartAt())
-                    ->setParameter('endAt', $mission->getEndAt())
-                    ->getQuery()
-                    ->getResult();
-
-                if (!empty($conflictingMissions)) {
-                    $this->addFlash('error', 'L\'équipe est déjà assignée à une autre mission durant cette période.');
-                    return $this->render('mission/new.html.twig', [
-                        'mission' => $mission,
-                        'form' => $form->createView(),
-                    ]);
-                }
-            }
-
-            // Validation des pouvoirs requis
-            $requiredPowers = $mission->getRequiredPowers();
-            $teamPowers = [];
-            foreach ($assignedTeam->getMembers() as $member) {
-                foreach ($member->getPowers() as $power) {
-                    $teamPowers[] = $power->getName();
-                }
-            }
-
-            $missingPowers = [];
-            foreach ($requiredPowers as $requiredPower) {
-                if (!in_array($requiredPower->getName(), $teamPowers)) {
-                    $missingPowers[] = $requiredPower->getName();
-                }
-            }
-
-            if (!empty($missingPowers)) {
-                $this->addFlash('error', 'L\'équipe n\'a pas les pouvoirs requis : ' . implode(', ', $missingPowers));
+            if (!$this->validateTeamAvailability($entityManager, $mission)) {
                 return $this->render('mission/new.html.twig', [
                     'mission' => $mission,
                     'form' => $form->createView(),
                 ]);
             }
 
-            // Si tout est valide, sauvegarder la mission
+            // Validation des pouvoirs requis
+            if (!$this->validateRequiredPowers($mission)) {
+                return $this->render('mission/new.html.twig', [
+                    'mission' => $mission,
+                    'form' => $form->createView(),
+                ]);
+            }
+
+            // Sauvegarder la mission si tout est valide
             $entityManager->persist($mission);
             $entityManager->flush();
 
@@ -139,60 +99,18 @@ final class MissionController extends AbstractController
             }
 
             // Validation du statut "en cours"
-            if ($mission->getStatus() === 'in_progress') {
-                $now = new \DateTime();
-                if (!($mission->getStartAt() <= $now && $mission->getEndAt() >= $now)) {
-                    $this->addFlash('error', 'Les dates ne correspondent pas au statut "en cours".');
-                    return $this->render('mission/edit.html.twig', [
-                        'mission' => $mission,
-                        'form' => $form->createView(),
-                    ]);
-                }
-            }
+            $this->validateInProgressDates($mission);
 
             // Validation de la disponibilité de l'équipe
-            $assignedTeam = $mission->getAssignedTeam();
-            if ($assignedTeam) {
-                $conflictingMissions = $entityManager->createQueryBuilder()
-                    ->select('m')
-                    ->from(Mission::class, 'm')
-                    ->where('m.assignedTeam = :team')
-                    ->andWhere(':startAt BETWEEN m.startAt AND m.endAt OR :endAt BETWEEN m.startAt AND m.endAt')
-                    ->andWhere('m.id != :currentMissionId')
-                    ->setParameter('team', $assignedTeam)
-                    ->setParameter('startAt', $mission->getStartAt())
-                    ->setParameter('endAt', $mission->getEndAt())
-                    ->setParameter('currentMissionId', $mission->getId())
-                    ->getQuery()
-                    ->getResult();
-
-                if (!empty($conflictingMissions)) {
-                    $this->addFlash('error', 'L\'équipe est déjà assignée à une autre mission durant cette période.');
-                    return $this->render('mission/edit.html.twig', [
-                        'mission' => $mission,
-                        'form' => $form->createView(),
-                    ]);
-                }
+            if (!$this->validateTeamAvailability($entityManager, $mission, true)) {
+                return $this->render('mission/edit.html.twig', [
+                    'mission' => $mission,
+                    'form' => $form->createView(),
+                ]);
             }
 
             // Validation des pouvoirs requis
-            $requiredPowers = $mission->getRequiredPowers();
-            $teamPowers = [];
-            foreach ($assignedTeam->getMembers() as $member) {
-                foreach ($member->getPowers() as $power) {
-                    $teamPowers[] = $power->getName();
-                }
-            }
-
-            $missingPowers = [];
-            foreach ($requiredPowers as $requiredPower) {
-                if (!in_array($requiredPower->getName(), $teamPowers)) {
-                    $missingPowers[] = $requiredPower->getName();
-                }
-            }
-
-            if (!empty($missingPowers)) {
-                $this->addFlash('error', 'L\'équipe n\'a pas les pouvoirs requis : ' . implode(', ', $missingPowers));
+            if (!$this->validateRequiredPowers($mission)) {
                 return $this->render('mission/edit.html.twig', [
                     'mission' => $mission,
                     'form' => $form->createView(),
@@ -222,5 +140,71 @@ final class MissionController extends AbstractController
         }
 
         return $this->redirectToRoute('app_mission_index');
+    }
+
+    private function validateInProgressDates(Mission $mission): void
+    {
+        if ($mission->getStatus() === 'in_progress') {
+            $now = new \DateTime();
+            if (!($mission->getStartAt() <= $now && $mission->getEndAt() >= $now)) {
+                $this->addFlash('error', 'Les dates ne correspondent pas au statut "en cours".');
+            }
+        }
+    }
+
+    private function validateTeamAvailability(EntityManagerInterface $entityManager, Mission $mission, bool $isEdit = false): bool
+    {
+        $assignedTeam = $mission->getAssignedTeam();
+        if ($assignedTeam) {
+            $queryBuilder = $entityManager->createQueryBuilder()
+                ->select('m')
+                ->from(Mission::class, 'm')
+                ->where('m.assignedTeam = :team')
+                ->andWhere(':startAt BETWEEN m.startAt AND m.endAt OR :endAt BETWEEN m.startAt AND m.endAt')
+                ->setParameter('team', $assignedTeam)
+                ->setParameter('startAt', $mission->getStartAt())
+                ->setParameter('endAt', $mission->getEndAt());
+
+            if ($isEdit) {
+                $queryBuilder->andWhere('m.id != :currentMissionId')
+                    ->setParameter('currentMissionId', $mission->getId());
+            }
+
+            $conflictingMissions = $queryBuilder->getQuery()->getResult();
+
+            if (!empty($conflictingMissions)) {
+                $this->addFlash('error', 'L\'équipe est déjà assignée à une autre mission durant cette période.');
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private function validateRequiredPowers(Mission $mission): bool
+    {
+        $assignedTeam = $mission->getAssignedTeam();
+        $requiredPowers = $mission->getRequiredPowers();
+
+        if ($assignedTeam) {
+            $teamPowers = [];
+            foreach ($assignedTeam->getMembers() as $member) {
+                foreach ($member->getPowers() as $power) {
+                    $teamPowers[] = $power->getName();
+                }
+            }
+
+            $missingPowers = [];
+            foreach ($requiredPowers as $requiredPower) {
+                if (!in_array($requiredPower->getName(), $teamPowers)) {
+                    $missingPowers[] = $requiredPower->getName();
+                }
+            }
+
+            if (!empty($missingPowers)) {
+                $this->addFlash('error', 'L\'équipe n\'a pas les pouvoirs requis : ' . implode(', ', $missingPowers));
+                return false;
+            }
+        }
+        return true;
     }
 }
