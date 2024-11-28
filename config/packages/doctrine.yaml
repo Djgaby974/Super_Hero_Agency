@@ -8,6 +8,10 @@ doctrine:
 
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
+
+                # Activer les logs SQL pour vérifier les requêtes exécutées
+        logging: true
+        profiling: true
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true

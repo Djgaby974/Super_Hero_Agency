@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Mission{% endblock %}
+{% block title %}Modifier Mission{% endblock %}
 
 {% block body %}
 <div class="max-w-4xl mx-auto py-8 px-6 bg-white rounded-lg shadow-lg">
-    <h1 class="text-2xl font-bold mb-6 text-yellow-600 text-center">Edit Mission</h1>
+    <h1 class="text-2xl font-bold mb-6 text-green-600 text-center">Modifier Mission</h1>
 
     <!-- Affichage des erreurs de validation -->
     {% for message in app.flashes('error') %}
@@ -26,10 +26,6 @@
         }) }}
 
         {{ form_row(form.description, {
-            'attr': {'class': 'w-full border rounded-lg p-2'}
-        }) }}
-
-        {{ form_row(form.status, {
             'attr': {'class': 'w-full border rounded-lg p-2'}
         }) }}
 
@@ -58,7 +54,7 @@
         }) }}
 
         <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-500 transition-all">
-            Update Mission
+            Mettre à jour
         </button>
 
         {{ form_end(form) }}

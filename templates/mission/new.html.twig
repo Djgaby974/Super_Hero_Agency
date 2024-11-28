@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create Mission{% endblock %}
+{% block title %}Créer une mission{% endblock %}
 
 {% block body %}
 <div class="max-w-4xl mx-auto py-8 px-6 bg-white rounded-lg shadow-lg">
-    <h1 class="text-2xl font-bold mb-6 text-yellow-600 text-center">Create New Mission</h1>
+    <h1 class="text-2xl font-bold mb-6 text-yellow-600 text-center">Créer une mission</h1>
 
     <!-- Affichage des erreurs de validation -->
     {% for message in app.flashes('error') %}
@@ -22,15 +22,11 @@
         {{ form_start(form) }}
 
         {{ form_row(form.title, {
-            'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Enter mission title'}
+            'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Titre de la mission'}
         }) }}
 
         {{ form_row(form.description, {
-            'attr': {'class': 'w-full border rounded-lg p-2', 'rows': 4, 'placeholder': 'Enter mission description'}
-        }) }}
-
-        {{ form_row(form.status, {
-            'attr': {'class': 'w-full border rounded-lg p-2'}
+            'attr': {'class': 'w-full border rounded-lg p-2', 'rows': 4, 'placeholder': 'Description de la mission'}
         }) }}
 
         {{ form_row(form.startAt, {
@@ -42,7 +38,7 @@
         }) }}
 
         {{ form_row(form.location, {
-            'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Enter mission location'}
+            'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Lieu de la mission'}
         }) }}
 
         {{ form_row(form.dangerLevel, {
@@ -58,7 +54,7 @@
         }) }}
 
         <button type="submit" class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 transition-all">
-            Create Mission
+            Créer la mission
         </button>
 
         {{ form_end(form) }}

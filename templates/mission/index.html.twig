@@ -1,28 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mission index{% endblock %}
+{% block title %}Liste des missions{% endblock %}
 
 {% block body %}
-<h1 class="text-center mb-4">Mission index</h1>
+<h1 class="text-center mb-4">Liste des missions</h1>
 
+<!-- Barre de recherche -->
+<form method="get" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Rechercher une mission" value="{{ search }}">
+        <button class="btn btn-outline-primary" type="submit">Rechercher</button>
+    </div>
+</form>
+
+<!-- Tableau des missions -->
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th>Id</th>
-            <th>Title</th>
+            <th>#</th>
+            <th>Titre</th>
             <th>Description</th>
-            <th>Status</th>
-            <th>StartAt</th>
-            <th>EndAt</th>
-            <th>Location</th>
-            <th>DangerLevel</th>
-            <th>Success</th>
+            <th>Statut</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
+            <th>Lieu</th>
+            <th>Niveau de danger</th>
+            <th>Réussite</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
     {% for mission in missions %}
-        <tr>
+        <tr class="{% if mission.status == 'in_progress' %}table-warning{% endif %}">
             <td>{{ mission.id }}</td>
             <td>{{ mission.title }}</td>
             <td>{{ mission.description }}</td>
@@ -33,12 +42,14 @@
                     <span class="badge bg-info text-dark">À venir</span>
                 {% elseif mission.status == 'completed' %}
                     <span class="badge bg-success">Terminée</span>
+                {% elseif mission.status == 'upcoming' %}
+                    <span class="badge bg-primary">À venir</span>
                 {% else %}
                     <span class="badge bg-secondary">Inconnu</span>
                 {% endif %}
             </td>
-            <td>{{ mission.startAt ? mission.startAt|date('Y-m-d H:i:s') : '' }}</td>
-            <td>{{ mission.endAt ? mission.endAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ mission.startAt ? mission.startAt|date('d/m/Y H:i') : '' }}</td>
+            <td>{{ mission.endAt ? mission.endAt|date('d/m/Y H:i') : '' }}</td>
             <td>{{ mission.location }}</td>
             <td>{{ mission.dangerLevel }}</td>
             <td>
@@ -51,12 +62,17 @@
                 {% endif %}
             </td>
             <td>
-                <a href="{{ path('app_mission_show', {'id': mission.id}) }}" class="btn btn-sm btn-primary">Afficher</a>
-                <a href="{{ path('app_mission_edit', {'id': mission.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
-                
+                <a href="{{ path('app_mission_show', {'id': mission.id}) }}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-eye"></i> Afficher
+                </a>
+                <a href="{{ path('app_mission_edit', {'id': mission.id}) }}" class="btn btn-sm btn-warning">
+                    <i class="fas fa-edit"></i> Modifier
+                </a>
                 <form method="post" action="{{ path('app_mission_delete', {'id': mission.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette mission ?');">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ mission.id) }}">
-                    <button class="btn btn-sm btn-danger">Supprimer</button>
+                    <button class="btn btn-sm btn-danger">
+                        <i class="fas fa-trash"></i> Supprimer
+                    </button>
                 </form>
             </td>
         </tr>
@@ -67,6 +83,11 @@
     {% endfor %}
     </tbody>
 </table>
+
+<!-- Pagination -->
+<div class="d-flex justify-content-center">
+    {{ knp_pagination_render(missions) }}
+</div>
 
 <a href="{{ path('app_mission_new') }}" class="btn btn-success">Créer une nouvelle mission</a>
 {% endblock %}
