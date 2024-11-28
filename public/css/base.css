@@ -36,6 +36,7 @@ main {
     background: white;
     border-radius: 10px;
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    color: #1a1a40; /* Texte lisible sur fond clair */
 }
 
 /* Table */
@@ -64,24 +65,58 @@ table tr:hover {
     background-color: #feda6a;
 }
 
-/* Buttons */
-button, .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 14px;
+/* Liens dans le tableau */
+table a {
+    color: #ff5c58; /* Couleur par défaut des liens */
     font-weight: bold;
+    text-decoration: none; /* Pas de soulignement */
+}
+
+table a:hover {
+    color: #ff3c3c; /* Couleur au survol */
+    text-decoration: underline; /* Soulignement au survol */
+}
+
+/* Texte dans les cellules du tableau */
+table td {
+    color: #1a1a40; /* Couleur par défaut des textes dans les cellules */
+}
+
+/* Ajustement des liens dans les cellules avec un fond jaune */
+table tr:hover a {
+    color: #ff3c3c; /* Liens toujours visibles même sur le fond jaune */
+}
+
+/* Boutons dans le tableau */
+table .btn {
     color: white;
     background-color: #ff5c58;
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    border-radius: 4px;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    font-weight: bold;
     text-align: center;
+    display: inline-block;
+    cursor: pointer;
     text-decoration: none;
 }
 
-button:hover, .btn:hover {
+table .btn:hover {
     background-color: #ff3c3c;
 }
+
+
+/* Style des liens */
+a {
+    color: #007bff; /* Liens visibles */
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #0056b3; /* Plus foncé au survol */
+}
+
 /* Style des champs d'entrée */
 form input, form select, form textarea {
     padding: 10px;
@@ -134,4 +169,22 @@ form button[type="submit"], form .btn {
 form button[type="submit"]:hover, form .btn:hover {
     background-color: #ff3c3c;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Conteneur pour la page super/hero */
+.super-hero-container {
+    background-color: #f8f9fa; /* Fond clair pour contraste */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.super-hero-container a {
+    color: #ff5c58; /* Rouge héroïque pour les liens */
+    font-weight: bold;
+}
+
+.super-hero-container a:hover {
+    color: #ff3c3c;
+    text-decoration: underline;
 }

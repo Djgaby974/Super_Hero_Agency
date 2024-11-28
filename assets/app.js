@@ -2,6 +2,18 @@ import './bootstrap.js';
 import './styles/app.css'; // Importation du fichier CSS principal
 import Chart from 'chart.js/auto';
 
+// Importation de Switchery CSS et JS
+
+
+import Switchery from 'switchery';
+
+// Initialisation des Switchery toggles
+document.addEventListener('DOMContentLoaded', () => {
+    const elements = document.querySelectorAll('.js-switch-toggle');
+    elements.forEach((el) => {
+        new Switchery(el, { color: '#4CAF50', secondaryColor: '#F44336' });
+    });
+});
 
 
 /*
@@ -12,4 +24,3 @@ import Chart from 'chart.js/auto';
  */
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
-

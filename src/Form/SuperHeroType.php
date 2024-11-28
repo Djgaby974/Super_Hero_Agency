@@ -32,6 +32,7 @@ class SuperHeroType extends AbstractType
             ->add('isAvailable', CheckboxType::class, [
                 'label' => 'Available?',
                 'required' => false,
+                'attr' => ['class' => 'js-switch-toggle'], // Classe pour Switchery
             ])
             ->add('energyLevel', IntegerType::class, [
                 'label' => 'Energy Level',
@@ -73,8 +74,8 @@ class SuperHeroType extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'Powers',
                 'multiple' => true, // Permet de sélectionner plusieurs pouvoirs
-                'expanded' => true, // Affiche des cases à cocher
-                'attr' => ['class' => 'form-control'],
+                'expanded' => false, // Passer en liste déroulante avec Choices.js
+                'attr' => ['class' => 'js-choices'], // Classe pour Choices.js
             ]);
     }
 

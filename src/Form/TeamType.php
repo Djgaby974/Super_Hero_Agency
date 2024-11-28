@@ -28,26 +28,26 @@ class TeamType extends AbstractType
                                 ->where('s.energyLevel > :energyLevel')
                                 ->setParameter('energyLevel', 80);
                 },
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'js-choices'], // Utilisation de Choices.js
             ])
             ->add('members', EntityType::class, [
                 'class' => SuperHero::class,
                 'choice_label' => 'name',
                 'multiple' => true,
-                'expanded' => true,
+                'expanded' => false, // Utilisation de Choices.js pour un champ multi-sélection
                 'label' => 'Members',
                 'query_builder' => function ($repo) {
                     return $repo->createQueryBuilder('s')
                                 ->leftJoin('s.teams', 't')
-                                ->where('t.id IS NULL'); // Exclude heroes already in a team
+                                ->where('t.id IS NULL'); // Exclure les héros déjà dans une équipe
                 },
+                'attr' => ['class' => 'js-choices'], // Utilisation de Choices.js
             ])
             ->add('isActive', CheckboxType::class, [
                 'label' => 'Équipe active ?',
-                'required' => false, // Permet de ne pas forcer la case à être cochée
-                'attr' => ['class' => 'form-check-input'],
-            ])
-            ;
+                'required' => false,
+                'attr' => ['class' => 'js-switch-toggle'], // Utilisation de Switchery
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

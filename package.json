@@ -33,6 +33,8 @@
   "description": "",
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
-    "chart.js": "^4.4.6"
+    "chart.js": "^4.4.6",
+    "choices.js": "^11.0.2",
+    "switchery": "^0.0.2"
   }
 }

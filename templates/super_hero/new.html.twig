@@ -25,10 +25,10 @@
             {{ form_errors(form.alterEgo) }}
         </div>
 
-        <!-- Champ Availability -->
+        <!-- Champ Availability (Switchery) -->
         <div class="mb-4">
             {{ form_label(form.isAvailable) }}
-            {{ form_widget(form.isAvailable, {'attr': {'class': 'w-full'}}) }}
+            {{ form_widget(form.isAvailable, {'attr': {'class': 'js-switch-toggle'}}) }}
             {{ form_errors(form.isAvailable) }}
         </div>
 
@@ -58,6 +58,13 @@
             {{ form_label(form.createdAt) }}
             {{ form_widget(form.createdAt, {'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Select creation date'}}) }}
             {{ form_errors(form.createdAt) }}
+        </div>
+
+        <!-- Champ Powers (Choices.js) -->
+        <div class="mb-4">
+            {{ form_label(form.powers) }}
+            {{ form_widget(form.powers, {'attr': {'class': 'js-choices', 'data-placeholder': 'Select powers'}}) }}
+            {{ form_errors(form.powers) }}
         </div>
 
         <!-- Bouton Submit -->

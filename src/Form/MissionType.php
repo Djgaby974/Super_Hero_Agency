@@ -7,8 +7,8 @@ use App\Entity\Team;
 use App\Entity\Power;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MissionType extends AbstractType
@@ -52,16 +52,19 @@ class MissionType extends AbstractType
                 'class' => Power::class,
                 'choice_label' => 'name',
                 'multiple' => true,
-                'expanded' => true,
+                'expanded' => false, // Pour utiliser Choices.js
                 'label' => 'Pouvoirs Requis',
-                'attr' => ['class' => 'form-control'],
+                'attr' => [
+                    'class' => 'js-choices', // Classe pour l'initialisation Choices.js
+                ],
             ])
             ->add('isSuccessful', CheckboxType::class, [
                 'label' => 'Mission Réussie',
                 'required' => false,
-                'attr' => ['class' => 'form-check-input'],
+                'attr' => [
+                    'class' => 'js-switch-toggle', // Classe pour l'initialisation Switchery
+                ],
             ]);
-            // Le champ `status` a été retiré car il est géré automatiquement
     }
 
     public function configureOptions(OptionsResolver $resolver): void

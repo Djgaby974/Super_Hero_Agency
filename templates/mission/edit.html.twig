@@ -49,9 +49,17 @@
             'attr': {'class': 'w-full border rounded-lg p-2'}
         }) }}
 
-        {{ form_row(form.requiredPowers, {
-            'attr': {'class': 'w-full border rounded-lg p-2'}
-        }) }}
+        <!-- Intégration de Choices.js pour les pouvoirs requis -->
+        <div>
+            <label for="requiredPowers" class="form-label">{{ form_label(form.requiredPowers) }}</label>
+            {{ form_widget(form.requiredPowers, { 'attr': { 'class': 'js-choices' } }) }}
+        </div>
+
+        <!-- Intégration de Switchery.js pour le champ "Mission Réussie" -->
+        <div class="flex items-center">
+            <label for="isSuccessful" class="form-label mr-4">{{ form_label(form.isSuccessful) }}</label>
+            {{ form_widget(form.isSuccessful, { 'attr': { 'class': 'js-switch-toggle' } }) }}
+        </div>
 
         <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-500 transition-all">
             Mettre à jour

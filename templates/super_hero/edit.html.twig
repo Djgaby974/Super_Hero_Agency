@@ -9,7 +9,70 @@
     </h1>
 
     <form method="post" enctype="multipart/form-data">
-        {{ include('super_hero/_form.html.twig', {'button_label': 'Save Changes'}) }}
+        {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+
+        <!-- Champ Name -->
+        <div class="mb-4">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name, {'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Enter superhero name'}}) }}
+            {{ form_errors(form.name) }}
+        </div>
+
+        <!-- Champ Alter Ego -->
+        <div class="mb-4">
+            {{ form_label(form.alterEgo) }}
+            {{ form_widget(form.alterEgo, {'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Enter alter ego (optional)'}}) }}
+            {{ form_errors(form.alterEgo) }}
+        </div>
+
+        <!-- Champ Availability (Switchery) -->
+        <div class="mb-4">
+            {{ form_label(form.isAvailable) }}
+            {{ form_widget(form.isAvailable, {'attr': {'class': 'js-switch-toggle'}}) }}
+            {{ form_errors(form.isAvailable) }}
+        </div>
+
+        <!-- Champ Energy Level -->
+        <div class="mb-4">
+            {{ form_label(form.energyLevel) }}
+            {{ form_widget(form.energyLevel, {'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Enter energy level', 'min': 0, 'max': 100}}) }}
+            {{ form_errors(form.energyLevel) }}
+        </div>
+
+        <!-- Champ Biography -->
+        <div class="mb-4">
+            {{ form_label(form.biography) }}
+            {{ form_widget(form.biography, {'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Write a short biography'}}) }}
+            {{ form_errors(form.biography) }}
+        </div>
+
+        <!-- Champ Upload Image -->
+        <div class="mb-4">
+            {{ form_label(form.image) }}
+            {{ form_widget(form.image, {'attr': {'class': 'w-full border rounded-lg p-2'}}) }}
+            {{ form_errors(form.image) }}
+        </div>
+
+        <!-- Champ Created At -->
+        <div class="mb-4">
+            {{ form_label(form.createdAt) }}
+            {{ form_widget(form.createdAt, {'attr': {'class': 'w-full border rounded-lg p-2', 'placeholder': 'Select creation date'}}) }}
+            {{ form_errors(form.createdAt) }}
+        </div>
+
+        <!-- Champ Powers (Choices.js) -->
+        <div class="mb-4">
+            {{ form_label(form.powers) }}
+            {{ form_widget(form.powers, {'attr': {'class': 'js-choices', 'data-placeholder': 'Select powers'}}) }}
+            {{ form_errors(form.powers) }}
+        </div>
+
+        <!-- Bouton Submit -->
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-500 transition-all">
+            Save Changes
+        </button>
+
+        {{ form_end(form) }}
     </form>
 
     <div class="flex justify-between mt-6">

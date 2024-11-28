@@ -29,20 +29,23 @@
             'attr': {'class': 'w-full border border-gray-300 rounded-lg p-2'}
         }) }}
 
-        <!-- Leader de l'équipe -->
-        {{ form_row(form.leader, {
-            'attr': {'class': 'w-full border border-gray-300 rounded-lg p-2'}
-        }) }}
+        <!-- Leader de l'équipe (Choices.js) -->
+        <div>
+            <label for="{{ form.leader.vars.id }}" class="block text-gray-700 font-bold">{{ form_label(form.leader) }}</label>
+            {{ form_widget(form.leader, { 'attr': {'class': 'js-choices'} }) }}
+        </div>
 
-        <!-- Membres de l'équipe -->
-        {{ form_row(form.members, {
-            'attr': {'class': 'w-full border border-gray-300 rounded-lg p-2'}
-        }) }}
+        <!-- Membres de l'équipe (Choices.js) -->
+        <div>
+            <label for="{{ form.members.vars.id }}" class="block text-gray-700 font-bold">{{ form_label(form.members) }}</label>
+            {{ form_widget(form.members, { 'attr': {'class': 'js-choices'} }) }}
+        </div>
 
-        <!-- Statut actif -->
-        {{ form_row(form.isActive, {
-            'attr': {'class': 'form-check-input'}
-        }) }}
+        <!-- Statut actif (Switchery) -->
+        <div class="flex items-center space-x-2">
+            {{ form_widget(form.isActive, { 'attr': {'class': 'js-switch-toggle'} }) }}
+            <label for="{{ form.isActive.vars.id }}" class="text-gray-700 font-bold">{{ form_label(form.isActive) }}</label>
+        </div>
 
         <!-- Bouton de mise à jour -->
         <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-500 transition-all">
