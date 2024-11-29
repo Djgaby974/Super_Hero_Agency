@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Super Hero Agency</title>
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+</head>
+<body>
+    <!-- Conteneur principal -->
+    <div class="welcome-container">
+        <h1 class="welcome-title">Bienvenue à l'agence des super-héros</h1>
+        <p class="welcome-description">Rassemblez votre équipe, menez des missions, et sauvez le monde !</p>
+
+        <!-- Logo cliquable -->
+        <div id="logo-container">
+            <a href="{{ path('app_super_hero_index') }}" class="logo-link">
+                <div class="logo"></div>
+            </a>
+        </div>
+        <p class="click-indicator">Cliquez sur le logo pour continuer</p>
+    </div>
+
+    <!-- Overlay de transition -->
+    <div id="transition-overlay" class="transition-overlay"></div>
+
+    <!-- Animation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animation d'entrée
+            const timeline = gsap.timeline({ defaults: { duration: 1, ease: "power2.inOut" } });
+            
+            timeline
+                .from(".welcome-title", { y: -50, opacity: 0 })
+                .from(".welcome-description", { y: 50, opacity: 0 }, "-=0.5")
+                .from("#logo-container", { scale: 0, opacity: 0 }, "-=0.5")
+                .from(".click-indicator", { opacity: 0, scale: 0.8 }, "-=0.5");
+
+            // Animation de sortie au clic du logo
+            document.querySelector('.logo-link').addEventListener('click', (e) => {
+                e.preventDefault(); // Empêche la redirection immédiate
+
+                const overlay = document.getElementById('transition-overlay');
+                gsap.to(overlay, { scaleX: 1, duration: 1, transformOrigin: "left center", onComplete: () => {
+                    window.location.href = e.target.closest('a').href; // Redirige après l'animation
+                }});
+            });
+        });
+    </script>
+</body>
+</html>
