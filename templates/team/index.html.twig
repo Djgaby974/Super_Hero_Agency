@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Teams{% endblock %}
+{% block title %}Equipes{% endblock %}
 
 {% block body %}
 <div class="max-w-4xl mx-auto py-8 px-6 bg-white rounded-lg shadow-lg">
-    <h1 class="text-2xl font-bold mb-6 text-yellow-600 text-center">Teams</h1>
+    <h1 class="text-2xl font-bold mb-6 text-yellow-600 text-center">Equipes</h1>
 
     <!-- Tableau des équipes -->
     <table class="table-auto w-full border-collapse border border-gray-300">
@@ -32,7 +32,7 @@
                     <form method="get" action="{{ path('app_team_show', {'id': team.id}) }}">
                         <button type="submit"
                                 class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-400 transition-all text-center">
-                            View
+                            Afficher
                         </button>
                     </form>
 
@@ -40,7 +40,7 @@
                     <form method="get" action="{{ path('app_team_edit', {'id': team.id}) }}">
                         <button type="submit"
                                 class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-400 transition-all text-center">
-                            Edit
+                            Modifier
                         </button>
                     </form>
 
@@ -50,7 +50,7 @@
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ team.id) }}">
                         <button type="submit"
                                 class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-400 transition-all text-center">
-                            Delete
+                            Supprimer
                         </button>
                     </form>
                 </td>
@@ -68,7 +68,7 @@
         <form method="get" action="{{ path('app_team_new') }}">
             <button type="submit"
                     class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 transition-all text-center">
-                Create New Team
+                Créer une nouvelle équipe
             </button>
         </form>
     </div>
