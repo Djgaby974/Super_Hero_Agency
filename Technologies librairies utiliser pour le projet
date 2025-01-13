@@ -1,0 +1,19 @@
+Résumé des Technologies et Outils Utilisés dans Super Hero Agency
+Technologies et Frameworks
+- Backend : Le projet est développé en PHP en utilisant le framework Symfony, offrant une structure robuste et extensible pour le développement d'applications web.
+- Frontend : Les interfaces utilisateur sont construites avec Twig pour le templating, et Bootstrap pour une conception responsive et moderne.
+- Base de données : Gestion des entités et des relations via Doctrine ORM, facilitant l'interaction avec la base de données.
+Bibliothèques et Outils
+- Animations : Utilisation de GSAP (GreenSock Animation Platform) pour des animations fluides et interactives sur la page d'accueil et lors des transitions de pages.
+- Formulaires :
+  - Choices.js : Améliore l'expérience utilisateur pour les sélections multiples dans les formulaires, notamment pour la sélection des pouvoirs des super-héros.
+  - Switchery.js : Remplace les cases à cocher par des interrupteurs stylisés, offrant une interface plus moderne.
+- Gestion des dépendances : Composer est utilisé pour gérer les dépendances PHP du projet, assurant une installation et une mise à jour cohérentes des packages.
+Fonctionnalités Clés
+- CRUD Complet : Implémentation des opérations de création, lecture, mise à jour et suppression pour les entités principales : Super Héros, Équipes et Missions.
+- Validation Personnalisée : Mise en place de règles métier spécifiques, telles que la vérification du niveau d'énergie d'un leader d'équipe avant l'assignation à une mission.
+- Transitions Fluides : Intégration de transitions animées lors de la navigation entre les pages pour une expérience utilisateur améliorée.
+Bonnes Pratiques
+- Architecture MVC : Adoption du modèle MVC (Modèle-Vue-Contrôleur) via Symfony, séparant clairement la logique métier, la présentation et le contrôle des flux de données.
+- Responsive Design : Utilisation de Bootstrap et de CSS personnalisé pour assurer une compatibilité sur divers appareils et tailles d'écran.
+- Contrôle de Version : Utilisation de Git pour le suivi des modifications du code source, facilitant la collaboration et la gestion des versions.
