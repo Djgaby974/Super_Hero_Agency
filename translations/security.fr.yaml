@@ -1,0 +1,4 @@
+"Bad credentials.": "Identifiants incorrects. Veuillez réessayer."
+"Invalid credentials.": "Identifiants incorrects. Veuillez réessayer."
+"Username could not be found.": "Aucun compte n'existe avec cet email."
+"Invalid CSRF token.": "La session a expiré. Veuillez vous reconnecter."

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Mission;
 use App\Form\MissionType;
+use App\Repository\MissionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,24 +16,18 @@ use Symfony\Component\Routing\Annotation\Route;
 final class MissionController extends AbstractController
 {
     #[Route(name: 'app_mission_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request): Response
+    public function index(Request $request, MissionRepository $missionRepository, PaginatorInterface $paginator, EntityManagerInterface $entityManager): Response
     {
-        // Récupération du paramètre de recherche
         $search = $request->query->get('search', '');
 
-        // Création de la requête pour les missions
-        $queryBuilder = $entityManager->getRepository(Mission::class)->createQueryBuilder('m');
-
-        if (!empty($search)) {
-            $queryBuilder->where('m.title LIKE :search')
-                ->setParameter('search', '%' . $search . '%');
-        }
+        // Utilisation du repository pour la recherche
+        $queryBuilder = $missionRepository->createSearchQueryBuilder($search);
 
         // Pagination des résultats
         $missions = $paginator->paginate(
             $queryBuilder->getQuery(),
-            $request->query->getInt('page', 1), // Page actuelle
-            10 // Nombre de résultats par page
+            $request->query->getInt('page', 1),
+            10
         );
 
         // Mise à jour des statuts pour les missions affichées

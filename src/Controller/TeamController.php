@@ -23,7 +23,7 @@ final class TeamController extends AbstractController
     }
 
     #[Route('/new', name: 'app_team_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, TeamRepository $teamRepository): Response
     {
         $team = new Team();
         $form = $this->createForm(TeamType::class, $team);
@@ -31,10 +31,10 @@ final class TeamController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Vérification des contraintes
-            $error = $this->validateTeamConstraints($team);
+            $error = $teamRepository->validateTeamConstraints($team);
 
             if ($error) {
-                $this->addFlash('error', $error); // Affiche l'erreur correspondante
+                $this->addFlash('error', $error);
             } else {
                 $team->setCreatedAt(new \DateTimeImmutable());
                 $entityManager->persist($team);
@@ -59,17 +59,17 @@ final class TeamController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_team_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Team $team, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Team $team, EntityManagerInterface $entityManager, TeamRepository $teamRepository): Response
     {
         $form = $this->createForm(TeamType::class, $team);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Vérification des contraintes
-            $error = $this->validateTeamConstraints($team);
+            $error = $teamRepository->validateTeamConstraints($team);
 
             if ($error) {
-                $this->addFlash('error', $error); // Affiche l'erreur correspondante
+                $this->addFlash('error', $error);
             } else {
                 $entityManager->flush();
 
@@ -93,30 +93,5 @@ final class TeamController extends AbstractController
         }
 
         return $this->redirectToRoute('app_team_index');
-    }
-
-    /**
-     * Valide les contraintes spécifiques d'une équipe.
-     *
-     * @param Team $team
-     * @return string|null Renvoie un message d'erreur ou null si tout est valide.
-     */
-    private function validateTeamConstraints(Team $team): ?string
-    {
-        // Vérification du leader
-        if (!$team->getLeader()) {
-            return 'Vous devez sélectionner un leader pour l\'équipe.';
-        }
-        if ($team->getLeader()->getEnergyLevel() <= 80) {
-            return 'Le leader doit avoir un niveau d\'énergie supérieur à 80.';
-        }
-
-        // Vérification des membres
-        $memberCount = count($team->getMembers());
-        if ($memberCount < 2 || $memberCount > 5) {
-            return 'Une équipe doit avoir entre 2 et 5 membres.';
-        }
-
-        return null; // Pas d'erreur
     }
 }

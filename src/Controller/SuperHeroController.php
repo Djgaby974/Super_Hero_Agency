@@ -17,23 +17,11 @@ class SuperHeroController extends AbstractController
     #[Route('/', name: 'app_super_hero_index', methods: ['GET'])]
     public function index(Request $request, SuperHeroRepository $superHeroRepository): Response
     {
-        // Récupérer les filtres
         $availability = $request->query->get('isAvailable');
         $energyLevel = $request->query->get('energyLevel');
-    
-        // Construire la requête de filtrage
-        $queryBuilder = $superHeroRepository->createQueryBuilder('s');
-        if ($availability !== null && $availability !== '') {
-            $queryBuilder->andWhere('s.isAvailable = :isAvailable')
-                         ->setParameter('isAvailable', $availability);
-        }
-        if ($energyLevel !== null && $energyLevel !== '') {
-            $queryBuilder->andWhere('s.energyLevel >= :energyLevel')
-                         ->setParameter('energyLevel', $energyLevel);
-        }
-    
-        $superHeroes = $queryBuilder->getQuery()->getResult();
-    
+
+        $superHeroes = $superHeroRepository->findByFilters($availability, $energyLevel);
+
         return $this->render('super_hero/index.html.twig', [
             'super_heroes' => $superHeroes,
         ]);

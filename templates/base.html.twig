@@ -45,6 +45,14 @@
                         </a>
                     </li>
                 </ul>
+                {% if app.user %}
+                <div class="navbar-nav ms-auto">
+                    <span class="navbar-text me-3" style="color: #fff;">
+                        Connecté : {{ app.user.email }}
+                    </span>
+                    <a href="{{ path('app_logout') }}" class="btn btn-outline-light">Déconnexion</a>
+                </div>
+                {% endif %}
             </div>
         </div>
     </nav>
